@@ -7,7 +7,8 @@
 /* ---------- basic series ---------- */
 const num = v => (v === '' || v == null || isNaN(+v)) ? null : +v;
 function logVal(s, k){ const L = LOG.days[s]; return L ? num(L[k]) : null; }
-function weighIns(upto){ return Object.keys(LOG.days).sort().filter(d => !upto || d <= upto).map(d => ({ d, w: logVal(d,'weight') })).filter(x => x.w > 0); }
+/** Morning weigh-ins, skipping anything outside the plan's weight_min–weight_max (typos). */
+function weighIns(upto){ return Object.keys(LOG.days).sort().filter(d => !upto || d <= upto).map(d => ({ d, w: logVal(d,'weight') })).filter(x => x.w > 0 && validWeight(x.w)); }
 
 /** 7-day average weight ending on date s. Needs 3+ weigh-ins in the window. */
 function avg7(s){
@@ -153,7 +154,7 @@ function progressExtras(){
   let h = '<div class="stats">' +
     stat(a != null ? f1(a) : (ws.length ? f1(ws[ws.length-1].w) : '—'), a != null ? '7-day average, lb' : 'Latest weight, lb (avg needs 3)') +
     stat(r != null ? f2(r) + '%' : '—', 'Weekly change · target ' + thr('on_track', 0.7) + '–' + thrHi('on_track', 1.2) + '%') +
-    stat(s <= plan.settings.weigh_in ? Math.round(blo) + '–' + Math.round(bhi) : '—', 'Milestone band today, lb') +
+    (s <= plan.settings.weigh_in && Math.round(blo) !== Math.round(bhi) ? stat(Math.round(blo) + '–' + Math.round(bhi), 'Milestone band today, lb') : stat(String(ws.length), 'Weigh-ins logged')) +
     stat(wz.length > 1 ? ((wz[wz.length-1].v - wz[0].v) > 0 ? '+' : '') + (wz[wz.length-1].v - wz[0].v).toFixed(2) + '"' : (wz.length ? wz[0].v + '"' : '—'), wz.length > 1 ? 'Waist change' : 'Waist') + '</div>';
   h += '<div class="card chart"><h3>Weight</h3>' + weightChart() + '<div class="legend"><span><i style="background:var(--accent)"></i>7-day average</span><span><i style="background:var(--muted);width:6px;height:6px;border-radius:50%"></i>Morning weigh-ins</span><span><i style="background:var(--accent-soft);height:8px"></i>Part H milestone band</span></div></div>';
   h += '<div class="card chart"><h3>Waist</h3>' + waistChart() + '</div>';

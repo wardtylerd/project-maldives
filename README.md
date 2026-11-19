@@ -16,4 +16,7 @@ On your phone only, in the installed app's storage (IndexedDB, with a second cop
 - `index.html` — layout and styles
 - `app.js` — reads plan.md, builds each day's checklist, saves your log
 - `rules.js` — progress math, the Part H rules, and pattern flags (plain arithmetic, no AI)
-- `sw.js` — offline cache. Bump `VERSION` when index.html, app.js or rules.js change.
+- `food.js` — Food tab: weekly menu, meal-prep math, sauce batches, grocery list, recipe cards
+- `timer.js` — rope and heavy-bag interval timer (beeps, wake lock, auto check-off)
+- `splash.jpg` — the opening screen
+- `sw.js` — offline cache. Bump `VERSION` when any file other than plan.md changes.

@@ -1,8 +1,8 @@
 /* Offline support. The app shell is cache-first; plan.md is network-first so edits
    show up whenever there's a connection, with the cached copy used offline.
    Bump VERSION whenever index.html, app.js or the icons change. */
-const VERSION = 'pm-v2';
-const SHELL = ['./', 'index.html', 'app.js', 'rules.js', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'plan.md'];
+const VERSION = 'pm-v3';
+const SHELL = ['./', 'index.html', 'app.js', 'rules.js', 'food.js', 'timer.js', 'splash.jpg', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'plan.md'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
