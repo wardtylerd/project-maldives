@@ -340,7 +340,6 @@ function renderProgress(){
   h += backupHTML();
   return h+'</div>';
 }
-function progressExtras(){ return ''; }   // filled in by v2 (charts, Sunday review, rules)
 function backupHTML(){
   const lb = LOG.meta.lastBackup, ago = lb ? diff(lb.slice(0,10), todayStr()) : null;
   return '<div class="card"><h3>Backup</h3><p class="small muted">Your log lives on this phone. '+(UI.persisted?'iOS has marked it as persistent storage.':'Storage is best-effort, so back up weekly.')+
@@ -378,8 +377,7 @@ function renderPlan(){
   return h+'</div>';
 }
 
-/* ---------------- flags (v2 fills these in) ---------------- */
-function flagsFor(){ return []; }
+/* ---------------- flags (computed in rules.js) ---------------- */
 function flagHTML(f){ return '<div class="flag '+f.lv+'"><span class="ic"></span><div><b>'+esc(f.t)+'</b>'+esc(f.b||'')+(f.why?'<div class="why">'+esc(f.why)+'</div>':'')+'</div></div>'; }
 
 /* ---------------- events ---------------- */
