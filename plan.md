@@ -207,7 +207,7 @@ If two rows share an `id`, the first one that matches wins. `detail` can be `mea
 | Evening | 7:00 PM | dinner | Dinner: {dinner} + romaine salad, then 10-min walk | home dinner | meal:dinner |  |  |
 | Evening | 7:00 PM | psyllium | Psyllium 5 g with dinner | home from:2026-11-22 | supps:dinner |  |  |
 | Evening | 7:15 PM | nicotine | Nicotine rule | home | nicotine |  |  |
-| Evening | 8:00 PM | brine | Dry-brine {brine_g} g chicken for tomorrow | home brine |  | About {brine_salt} kosher salt (¾ tsp per 500 g), uncovered in the fridge. Prep is tomorrow. |  |
+| Evening | 8:00 PM | brine | Dry-brine {brine_amt} chicken for tomorrow's prep | home brine |  | Pat it dry, sprinkle {brine_salt} Morton kosher salt ({brine_salt_dc} if it's Diamond Crystal) on every side, and leave it uncovered on a plate in the fridge. |  |
 | Evening | 9:00 PM | screens | Screens down, lights dimmed | home |  | Dinner finished 2.5–3 h before bed. |  |
 | Evening | 9:30 PM | isopure | Isopure + evening supplements | home | supps:bed |  |  |
 | Evening | 10:15 PM | lights | Lights out: 7.5–8.5 h in bed | home |  | Sleep matters more than any supplement. |  |
@@ -249,179 +249,320 @@ If two rows share an `id`, the first one that matches wins. `detail` can be `mea
 
 ## Meals
 
-`cook`: `prep` means it comes from the Sunday or Wednesday prep; a time means it's cooked that evening. `trick` is the chef trick number shown on the recipe card. Ingredients are in the Ingredients table.
+`cook`: `prep` means it comes from the Sunday or Wednesday meal prep; anything else is how long it takes to cook that evening. `trick` is the chef trick number shown on the recipe card. Ingredients are in the Ingredients table, steps in Recipes.
 
 | id | name | kcal | protein | carbs | fat | sauce | cook | trick | description |
 |---|---|---|---|---|---|---|---|---|---|
 | breakfast | Breakfast shake | 500 | 80 |  |  | - | - |  | Shake with 50 g whey and 5 g creatine, Oikos Pro (7 oz), ½ grapefruit, string cheese, psyllium 5 g |
-| A | Lemon-herb chicken bowl | 540 | 57 | 48 | 11 | Lemon-garlic yogurt sauce (or swap: green herb or ginger-scallion, then skip the oil) | prep | 1 |  |
-| B | Cilantro-lime chicken burrito bowl | 545 | 54 | 52 | 12 | Lime crema + pico de gallo | prep | 6 |  |
-| C | Miso-ginger salmon and potatoes | 540 | 48 | 60 | 14 | Miso glaze (or Dijon-dill) | 20 min | 3 |  |
-| D | Carne asada steak tacos | 535 | 45 | 55 | 15 | Pickled red onion + salsa verde | 15–20 min | 4 | Marinate the steak 30 min to overnight. |
-| E | Garlic-ginger shrimp stir-fry | 550 | 58 | 58 | 8 | Stir-fry sauce (in recipe) | 15 min | 8 |  |
-| F | Lean beef Bolognese | 550 | 47 | 60 | 13 | - | 20 min | 7 |  |
-| G | Greek chicken plate | 500 | 54 | 44 | 10 | Tzatziki | prep | 2 |  |
+| A | Lemon-herb chicken bowl | 540 | 57 | 48 | 11 | Lemon-garlic yogurt sauce (swap: green herb or ginger-scallion sauce, then skip the broccoli oil) | prep | 1 | Chicken, brown rice and charred broccoli with a lemon-garlic yogurt sauce. |
+| B | Cilantro-lime chicken burrito bowl | 570 | 59 | 52 | 13 | Lime crema + pico de gallo | prep | 6 | Cumin-lime chicken, cilantro-lime rice and black beans over romaine. |
+| C | Miso-ginger salmon and potatoes | 540 | 48 | 60 | 14 | Miso glaze (in the recipe) | 25 min | 3 | Miso-glazed salmon with crispy potatoes and asparagus, all in the air fryer. |
+| D | Carne asada steak tacos | 535 | 45 | 55 | 15 | Pickled red onion + salsa verde | 20 min + marinade | 4 | Start the marinade in the morning, or at least 30 min before you cook. |
+| E | Garlic-ginger shrimp stir-fry | 550 | 58 | 58 | 8 | Stir-fry sauce (in the recipe) | 15 min | 8 | Shrimp, snap peas, bok choy and mushrooms over jasmine rice. |
+| F | Lean beef Bolognese | 550 | 47 | 60 | 13 | - | 25 min | 7 | Deeply browned lean beef and mushrooms in marinara over pasta. |
+| G | Greek chicken plate | 525 | 59 | 44 | 11 | Tzatziki | prep | 2 | Lemon-herb chicken, Greek salad, tzatziki, feta and warm pita. |
 | T | Thanksgiving plate |  | 60 |  |  | - | - |  | Half the plate turkey breast (8–10 oz), your two favorite sides, one dessert portion. Walk 20–30 min after. |
 
 ## Ingredients
 
-One row per ingredient per serving. `section` groups the grocery list. `batch` is `sun`, `wed`, `sun/wed` or `day-of`, for the prep screen.
+One row per ingredient for one serving, in US kitchen units (`oz` is weight; `cup`, `tbsp`, `tsp` are volume; `each` counts). Leave `qty` empty for "a pinch" or "a light coat". In `item`, `{s}` or `{f|ves}` handle plurals.
+- `part` groups the recipe card. On half-rice nights the rice itself (the Grains row in a part named `Rice`) is halved.
+- `prep` says where the row goes at meal prep: `brine` (the night before), `hot` (main container, reheated), `cold` (side container), `jar` (sauce jar), `bag` (prepped for a cooked dinner), `-` (made or added when you eat or cook).
+- `buy` is the grocery-list name (see Store units); `-` means it's a pantry staple. `section` groups the grocery list.
 
-| meal | ingredient | qty | unit | section | batch |
-|---|---|---|---|---|---|
-| A | chicken breast (lemon-herb) | 200 | g | Meat & fish | sun/wed |
-| A | brown rice, cooked | 140 | g | Grains | sun/wed |
-| A | broccoli | 150 | g | Produce | sun/wed |
-| A | olive oil | 1 | tsp | Pantry | sun/wed |
-| A | lemon | 0.5 | each | Produce | day-of |
-| A | scallion | 1 | each | Produce | sun/wed |
-| A | rice vinegar | 1 | tsp | Pantry | day-of |
-| A | lemon-garlic yogurt sauce | 40 | g | Sauce | sun |
-| B | chicken breast (cumin-lime) | 180 | g | Meat & fish | sun/wed |
-| B | brown rice, cooked (cilantro-lime) | 100 | g | Grains | sun/wed |
-| B | black beans, canned | 80 | g | Pantry | sun/wed |
-| B | pico de gallo | 60 | g | Sauce | sun/wed |
-| B | romaine | 50 | g | Produce | sun/wed |
-| B | avocado | 40 | g | Produce | day-of |
-| B | lime crema | 30 | g | Sauce | sun |
-| B | lime | 0.5 | each | Produce | day-of |
-| C | wild salmon | 170 | g | Meat & fish | day-of |
-| C | Yukon potatoes | 250 | g | Produce | day-of |
-| C | asparagus | 150 | g | Produce | day-of |
-| C | olive oil | 1 | tsp | Pantry | day-of |
-| C | white miso | 1 | tbsp | Pantry | day-of |
-| C | honey | 1 | tsp | Pantry | day-of |
-| C | ginger | 0.5 | tsp | Produce | day-of |
-| C | lemon | 0.25 | each | Produce | day-of |
-| D | top sirloin, trimmed | 170 | g | Meat & fish | day-of |
-| D | corn tortillas | 4 | each | Grains | day-of |
-| D | cabbage | 100 | g | Produce | sun |
-| D | pickled red onion | 30 | g | Sauce | sun |
-| D | salsa verde | 30 | g | Pantry | day-of |
-| D | cotija | 10 | g | Dairy | day-of |
-| D | lime | 0.5 | each | Produce | day-of |
-| D | low-sodium soy sauce | 1 | tsp | Pantry | day-of |
-| E | shrimp | 250 | g | Meat & fish | day-of |
-| E | snap peas | 100 | g | Produce | day-of |
-| E | bok choy | 100 | g | Produce | day-of |
-| E | mushrooms | 50 | g | Produce | day-of |
-| E | jasmine rice, cooked | 130 | g | Grains | day-of |
-| E | low-sodium soy sauce | 1 | tbsp | Pantry | day-of |
-| E | rice vinegar | 1 | tbsp | Pantry | day-of |
-| E | honey | 1 | tsp | Pantry | day-of |
-| E | cornstarch | 1 | tsp | Pantry | day-of |
-| E | ginger | 1 | tsp | Produce | day-of |
-| E | avocado oil | 1 | tsp | Pantry | day-of |
-| E | toasted sesame oil | 0.5 | tsp | Pantry | day-of |
-| E | scallion | 1 | each | Produce | day-of |
-| F | 95% lean ground beef | 150 | g | Meat & fish | day-of |
-| F | dry pasta | 60 | g | Grains | day-of |
-| F | mushrooms | 60 | g | Produce | day-of |
-| F | tomato paste | 1 | tbsp | Pantry | day-of |
-| F | marinara | 125 | g | Pantry | day-of |
-| F | balsamic vinegar | 1 | tsp | Pantry | day-of |
-| F | parmesan | 10 | g | Dairy | day-of |
-| F | basil | 3 | leaves | Produce | day-of |
-| G | chicken breast (lemon-herb) | 180 | g | Meat & fish | sun/wed |
-| G | whole-wheat pita | 1 | each | Grains | day-of |
-| G | English cucumber | 80 | g | Produce | sun/wed |
-| G | tomato | 100 | g | Produce | sun/wed |
-| G | red onion | 20 | g | Produce | sun/wed |
-| G | red wine vinegar | 1 | tsp | Pantry | day-of |
-| G | tzatziki | 75 | g | Sauce | sun |
-| G | feta | 15 | g | Dairy | day-of |
+| meal | part | qty | unit | item | prep | buy | section |
+|---|---|---|---|---|---|---|---|
+| A | Night before | 0.33 | tsp | kosher salt (Morton; ¾ tsp per lb of chicken) | brine | - | Staple |
+| A | Chicken | 7 | oz | chicken breast, boneless skinless, raw | hot | chicken breast | Meat & fish |
+| A | Chicken | 0.5 | tsp | dried oregano | hot | - | Staple |
+| A | Chicken | 0.5 | tsp | smoked paprika | hot | - | Staple |
+| A | Chicken | 0.25 | tsp | garlic powder | hot | - | Staple |
+| A | Chicken | 0.25 | tsp | lemon zest | hot | lemon zest | Produce |
+| A | Chicken | 0.125 | tsp | black pepper | hot | - | Staple |
+| A | Chicken |  |  | olive-oil spray, a light coat | hot | - | Staple |
+| A | Rice | 0.75 | cup | cooked brown rice | hot | brown rice, cooked | Grains |
+| A | Rice | 1 | tsp | rice vinegar | hot | rice vinegar | Pantry |
+| A | Rice | 1 | each | scallion{s}, thinly sliced | hot | scallions | Produce |
+| A | Broccoli | 1.5 | cup | broccoli florets, bite-size | hot | broccoli | Produce |
+| A | Broccoli | 1 | tsp | olive oil | hot | olive oil | Pantry |
+| A | Broccoli | 0.125 | tsp | garlic powder | hot | - | Staple |
+| A | Broccoli |  |  | a pinch each of chili flakes and salt | hot | - | Staple |
+| A | At the table | 2.5 | tbsp | Lemon-garlic yogurt sauce | jar | - | Sauce |
+| A | At the table | 0.25 | each | lemon, cut into a wedge | - | lemon | Produce |
+| B | Night before | 0.33 | tsp | kosher salt (Morton; ¾ tsp per lb of chicken) | brine | - | Staple |
+| B | Chicken | 7 | oz | chicken breast, boneless skinless, raw | hot | chicken breast | Meat & fish |
+| B | Chicken | 0.75 | tsp | ground cumin, toasted | hot | - | Staple |
+| B | Chicken | 0.5 | tsp | chili powder | hot | - | Staple |
+| B | Chicken | 0.25 | tsp | garlic powder | hot | - | Staple |
+| B | Chicken | 0.25 | tsp | dried oregano | hot | - | Staple |
+| B | Chicken | 0.5 | tsp | lime zest | hot | lime zest | Produce |
+| B | Chicken |  |  | olive-oil spray, a light coat | hot | - | Staple |
+| B | Rice | 0.5 | cup | cooked brown rice | hot | brown rice, cooked | Grains |
+| B | Rice | 1.5 | tsp | lime juice | hot | lime juice | Produce |
+| B | Rice | 1 | tbsp | cilantro, chopped | hot | cilantro | Produce |
+| B | Rice |  |  | a pinch of salt | hot | - | Staple |
+| B | Beans | 0.5 | cup | black beans (canned), rinsed and drained | hot | black beans | Pantry |
+| B | Beans | 0.25 | tsp | ground cumin | hot | - | Staple |
+| B | Beans | 0.125 | tsp | garlic powder | hot | - | Staple |
+| B | Beans | 1 | tbsp | water | hot | - | Staple |
+| B | Romaine | 1 | cup | romaine, chopped | cold | romaine | Produce |
+| B | At the table | 0.25 | cup | Pico de gallo | jar | - | Sauce |
+| B | At the table | 2 | tbsp | Lime crema | jar | - | Sauce |
+| B | At the table | 0.25 | each | avocado, sliced fresh | - | avocado | Produce |
+| B | At the table | 0.25 | each | lime, cut into a wedge | - | lime | Produce |
+| C | Salmon | 6 | oz | wild salmon fillet | - | wild salmon | Meat & fish |
+| C | Miso glaze | 1 | tbsp | white miso | - | white miso | Pantry |
+| C | Miso glaze | 1 | tsp | honey | - | honey | Pantry |
+| C | Miso glaze | 1 | tsp | rice vinegar | - | rice vinegar | Pantry |
+| C | Miso glaze | 0.5 | tsp | fresh ginger, finely grated | - | ginger | Produce |
+| C | Miso glaze | 1 | tsp | water | - | - | Staple |
+| C | Potatoes | 9 | oz | Yukon Gold potatoes (about 1½ medium), cut in 1-inch chunks | - | Yukon Gold potatoes | Produce |
+| C | Potatoes | 1 | tsp | olive oil | - | olive oil | Pantry |
+| C | Potatoes | 0.25 | tsp | garlic powder | - | - | Staple |
+| C | Potatoes | 0.25 | tsp | dried rosemary, crumbled | - | - | Staple |
+| C | Potatoes | 0.25 | tsp | kosher salt | - | - | Staple |
+| C | Asparagus | 5 | oz | asparagus (about 10 spears), woody ends snapped off | - | asparagus | Produce |
+| C | Asparagus |  |  | olive-oil spray and a pinch of salt | - | - | Staple |
+| C | To finish | 0.25 | each | lemon (zest it, then cut a wedge) | - | lemon | Produce |
+| D | Steak | 6 | oz | top sirloin steak, trimmed | - | top sirloin | Meat & fish |
+| D | Marinade | 1 | tbsp | lime juice | - | lime juice | Produce |
+| D | Marinade | 1 | tsp | low-sodium soy sauce | - | low-sodium soy sauce | Pantry |
+| D | Marinade | 1 | each | small garlic clove{s}, grated | - | - | Staple |
+| D | Marinade | 0.5 | tsp | ground cumin | - | - | Staple |
+| D | Marinade | 0.25 | tsp | chili powder | - | - | Staple |
+| D | Marinade | 0.125 | tsp | black pepper | - | - | Staple |
+| D | Slaw | 1.5 | cup | green cabbage, thinly shredded | bag | cabbage | Produce |
+| D | Slaw | 1 | tsp | lime juice | - | lime juice | Produce |
+| D | Slaw | 1 | tbsp | cilantro, chopped | - | cilantro | Produce |
+| D | Slaw |  |  | a pinch of salt | - | - | Staple |
+| D | Tacos | 4 | each | corn tortilla{s}, 6-inch | - | corn tortillas | Grains |
+| D | Tacos | 3 | tbsp | Quick-pickled red onion | jar | - | Sauce |
+| D | Tacos | 2 | tbsp | salsa verde (jarred) | - | salsa verde | Pantry |
+| D | Tacos | 1.5 | tbsp | cotija, crumbled | - | cotija | Dairy |
+| E | Shrimp | 9 | oz | raw shrimp, peeled and deveined (thawed) | - | shrimp | Meat & fish |
+| E | Vegetables | 0.75 | cup | mushrooms, sliced | - | mushrooms | Produce |
+| E | Vegetables | 1 | cup | snap peas, strings pulled | - | snap peas | Produce |
+| E | Vegetables | 2 | each | baby bok choy, halved lengthwise and rinsed | - | baby bok choy | Produce |
+| E | Vegetables | 1 | each | scallion{s}, sliced (whites and greens kept apart) | - | scallions | Produce |
+| E | Vegetables | 1 | tsp | avocado oil | - | avocado oil | Pantry |
+| E | Stir-fry sauce | 1 | tbsp | low-sodium soy sauce | - | low-sodium soy sauce | Pantry |
+| E | Stir-fry sauce | 1 | tbsp | rice vinegar | - | rice vinegar | Pantry |
+| E | Stir-fry sauce | 1 | tsp | honey | - | honey | Pantry |
+| E | Stir-fry sauce | 1 | tsp | fresh ginger, finely grated | - | ginger | Produce |
+| E | Stir-fry sauce | 1 | each | garlic clove{s}, grated | - | - | Staple |
+| E | Stir-fry sauce | 0.25 | tsp | chili flakes | - | - | Staple |
+| E | Stir-fry sauce | 1 | tsp | cornstarch | - | cornstarch | Pantry |
+| E | Stir-fry sauce | 2 | tbsp | water | - | - | Staple |
+| E | Rice | 0.75 | cup | cooked jasmine rice | - | jasmine rice, cooked | Grains |
+| E | To finish | 0.5 | tsp | toasted sesame oil | - | toasted sesame oil | Pantry |
+| F | Sauce | 5.33 | oz | 95% lean ground beef (⅓ of a 1-lb pack) | - | 95% lean ground beef | Meat & fish |
+| F | Sauce | 0.75 | cup | cremini mushrooms, finely chopped | - | mushrooms | Produce |
+| F | Sauce | 1 | tbsp | tomato paste | - | tomato paste | Pantry |
+| F | Sauce | 1 | each | garlic clove{s}, minced | - | - | Staple |
+| F | Sauce | 0.5 | tsp | dried oregano | - | - | Staple |
+| F | Sauce | 0.25 | tsp | chili flakes | - | - | Staple |
+| F | Sauce | 0.5 | cup | marinara (jarred) | - | marinara | Pantry |
+| F | Sauce | 1 | tsp | balsamic vinegar | - | balsamic vinegar | Pantry |
+| F | Sauce |  |  | olive-oil spray and a pinch of salt | - | - | Staple |
+| F | Pasta | 2 | oz | dry short pasta, like penne or rigatoni (about ½ cup) | - | dry pasta | Grains |
+| F | Pasta | 2 | tsp | kosher salt, for 2 quarts of pasta water | - | - | Staple |
+| F | To finish | 2 | tbsp | parmesan, finely grated | - | parmesan | Dairy |
+| F | To finish | 3 | each | basil lea{f|ves}, torn | - | basil | Produce |
+| G | Night before | 0.33 | tsp | kosher salt (Morton; ¾ tsp per lb of chicken) | brine | - | Staple |
+| G | Chicken | 7 | oz | chicken breast, boneless skinless, raw | hot | chicken breast | Meat & fish |
+| G | Chicken | 0.5 | tsp | dried oregano | hot | - | Staple |
+| G | Chicken | 0.5 | tsp | smoked paprika | hot | - | Staple |
+| G | Chicken | 0.25 | tsp | garlic powder | hot | - | Staple |
+| G | Chicken | 0.25 | tsp | lemon zest | hot | lemon zest | Produce |
+| G | Chicken | 0.125 | tsp | black pepper | hot | - | Staple |
+| G | Chicken |  |  | olive-oil spray, a light coat | hot | - | Staple |
+| G | Greek salad | 0.67 | cup | English cucumber, ½-inch dice | cold | English cucumber | Produce |
+| G | Greek salad | 0.67 | cup | cherry tomatoes, halved | cold | cherry tomatoes | Produce |
+| G | Greek salad | 2 | tbsp | red onion, finely diced | cold | red onion | Produce |
+| G | At the table | 1 | tsp | red wine vinegar | - | red wine vinegar | Pantry |
+| G | At the table | 0.25 | tsp | dried oregano | - | - | Staple |
+| G | At the table |  |  | a pinch of salt | - | - | Staple |
+| G | At the table | 0.33 | cup | Tzatziki | jar | - | Sauce |
+| G | At the table | 2 | tbsp | feta, crumbled | - | feta | Dairy |
+| G | At the table | 1 | each | whole-wheat pita{s} | - | whole-wheat pitas | Grains |
 
 ## Recipes
 
-| meal | step | text |
-|---|---|---|
-| A | 1 | Air-fry the dry-brined chicken at 400°F to 165°F. |
-| A | 2 | Toss the warm rice with rice vinegar and scallions. |
-| A | 3 | Air-fry the broccoli with oil, garlic and chili flakes until charred. |
-| A | 4 | At the table: lemon squeeze plus the yogurt sauce. |
-| B | 1 | Season the chicken with cumin, chili powder, garlic, oregano and lime, then air-fry to 165°F. |
-| B | 2 | Stir lime zest, juice, cilantro and salt into the warm rice. |
-| B | 3 | Warm the beans with cumin and garlic. |
-| B | 4 | Build the bowl: lettuce, rice, beans, chicken, pico, avocado, lime crema. |
-| C | 1 | Brush the salmon with miso glaze and air-fry at 400°F for 8–10 min. |
-| C | 2 | Air-fry the potatoes with oil, garlic powder and rosemary for 18–20 min. |
-| C | 3 | Roast the asparagus for 6–8 min, then add lemon zest. |
-| D | 1 | Marinate the steak 30 min to overnight in lime, garlic, cumin and soy. |
-| D | 2 | Sear on high heat to medium, rest 5 min, then slice thin across the grain. |
-| D | 3 | Char the tortillas in a dry pan. |
-| D | 4 | Top with slaw, pickled onion, salsa verde and cotija. |
-| E | 1 | Mix the sauce: soy, rice vinegar, honey, ginger, garlic, chili flakes, cornstarch and 2 tbsp water. |
-| E | 2 | Stir-fry the vegetables in the avocado oil on high for 3 min. |
-| E | 3 | Add the shrimp for 2–3 min until pink. |
-| E | 4 | Pour in the sauce and toss for 1 min. |
-| E | 5 | Finish with sesame oil and scallions over the rice. |
-| F | 1 | Brown the beef hard without stirring for 3 min. |
-| F | 2 | Add the mushrooms and cook them dry. |
-| F | 3 | Stir in the tomato paste and cook until it darkens. |
-| F | 4 | Add garlic, oregano and chili flakes, then the marinara and balsamic, and simmer 10 min. |
-| F | 5 | Serve over pasta with basil and parmesan. |
-| G | 1 | Air-fry the chicken (lemon, garlic, oregano, smoked paprika) to 165°F. |
-| G | 2 | Warm the pita. |
-| G | 3 | Dress the cucumber, tomato and onion with red wine vinegar and oregano when you eat. |
-| G | 4 | Serve with tzatziki and feta. |
+`phase`: `cook` is the full recipe for one serving. `serve` is what to do at mealtime with a container from meal prep.
+
+| meal | step | phase | text |
+|---|---|---|---|
+| A | 1 | serve | Lift one corner of the lid, sprinkle 1 tbsp water over the rice and microwave 2 min. Stir, then 30–60 s more until steaming. |
+| A | 2 | serve | Spoon the sauce on cold, straight from the jar (don't microwave it). Squeeze the lemon wedge over everything. |
+| A | 1 | cook | The night before: pat the chicken dry, sprinkle the salt on every side and leave it uncovered on a plate in the fridge. |
+| A | 2 | cook | Heat the air fryer to 400°F. If the breast is thicker than 1 inch, slice it in half horizontally so it cooks evenly. |
+| A | 3 | cook | Mist the chicken with oil spray, then coat it with the oregano, paprika, garlic powder, lemon zest and pepper. |
+| A | 4 | cook | Air-fry 10 min, flip, then 6–10 min more until the thickest part reads 165°F. Rest 5 min, then slice. |
+| A | 5 | cook | Toss the broccoli with the oil, garlic powder, chili flakes and salt. Air-fry at 400°F for 8–10 min, shaking halfway, until the edges char. |
+| A | 6 | cook | Stir the rice vinegar and scallion into the warm rice. |
+| A | 7 | cook | Bowl it: rice, broccoli, chicken. Spoon the sauce over and squeeze the lemon on top. |
+| B | 1 | serve | Microwave the hot container (chicken, rice, beans) with the lid ajar and 1 tbsp water over the rice: 2 min, stir, then 30–60 s more. |
+| B | 2 | serve | Tip it over the cold romaine. Add the pico and lime crema straight from the jars. |
+| B | 3 | serve | Slice ¼ avocado on top and squeeze the lime wedge. Wrap the rest of the avocado tight with the pit in; it keeps a day. |
+| B | 1 | cook | The night before: pat the chicken dry, salt every side and leave it uncovered on a plate in the fridge. |
+| B | 2 | cook | Toast the cumin in a dry pan over medium heat for 30–60 s, until it smells nutty. Mix it with the chili powder, garlic powder, oregano and lime zest. |
+| B | 3 | cook | Heat the air fryer to 400°F. Mist the chicken with oil spray and coat it with the spice mix. |
+| B | 4 | cook | Air-fry 10 min, flip, then 6–10 min more until it reads 165°F. Rest 5 min, then slice. |
+| B | 5 | cook | Warm the beans with the cumin, garlic powder and water in a small pot over medium heat, 3–4 min. |
+| B | 6 | cook | Stir the lime juice, cilantro and salt into the warm rice. |
+| B | 7 | cook | Bowl it: romaine, rice, beans, chicken, then pico, lime crema, avocado and a squeeze of lime. |
+| C | 1 | cook | Heat the air fryer to 400°F. Toss the potatoes with the oil, garlic powder, rosemary and salt. |
+| C | 2 | cook | Air-fry the potatoes 18–20 min, shaking every 6 min, until browned and a knife slides in easily. Tip them onto a plate and cover with foil. |
+| C | 3 | cook | While they cook, stir the miso, honey, rice vinegar, ginger and water into a smooth glaze. Pat the salmon dry. |
+| C | 4 | cook | Set the salmon skin-side down on a piece of foil or parchment in the basket. Brush the glaze over the top and sides. Lay the asparagus beside it, mist with oil and salt it. |
+| C | 5 | cook | Air-fry 7–9 min, until the salmon flakes with a fork and reads 145°F in the thickest part. If the glaze gets dark before then, lay foil loosely on top. |
+| C | 6 | cook | Zest the lemon over the asparagus, then squeeze the wedge over the plate. |
+| D | 1 | cook | Marinate: mix the lime juice, soy, garlic, cumin, chili powder and pepper in a zip bag. Add the steak and press out the air. 30 min on the counter, or all day in the fridge. |
+| D | 2 | cook | Toss the cabbage with the lime juice, cilantro and a pinch of salt. |
+| D | 3 | cook | Pat the steak dry with paper towels (a wet steak won't brown). Heat a cast-iron or heavy skillet on high for 3 min, then mist it with oil spray. |
+| D | 4 | cook | Sear 3–4 min per side without moving it, to 140°F for medium; it climbs a few degrees as it rests. Rest it on a board for 5 min. |
+| D | 5 | cook | While it rests, char the tortillas in the dry hot pan (or over a gas flame) 20–30 s per side, until spotted. Stack them in a clean towel so they stay soft. |
+| D | 6 | cook | Slice the steak ¼ inch thin across the grain: find the lines running through the meat and cut across them. |
+| D | 7 | cook | Build 4 tacos: slaw, steak, pickled onion, salsa verde, cotija. |
+| E | 1 | cook | Microwave the jasmine rice pouch 90 s and measure out your portion. Refrigerate the rest; it keeps 3 days. |
+| E | 2 | cook | Stir the soy, rice vinegar, honey, ginger, garlic, chili flakes, cornstarch and water in a small bowl until the cornstarch dissolves. |
+| E | 3 | cook | Pat the shrimp very dry with paper towels. |
+| E | 4 | cook | Heat a wok or large skillet on high for 2 min. Add the avocado oil, then the mushrooms, and leave them alone 2 min to brown. |
+| E | 5 | cook | Add the snap peas, bok choy and scallion whites. Stir-fry 2 min. |
+| E | 6 | cook | Push the vegetables aside. Lay the shrimp flat in the pan: 1 min, flip, 1 min more, until pink and curled into a loose C (a tight O means overcooked). |
+| E | 7 | cook | Stir the sauce again (the cornstarch settles), pour it in and toss 30–60 s until glossy. |
+| E | 8 | cook | Off the heat, add the sesame oil and scallion greens. Serve over the rice. |
+| F | 1 | cook | Bring 2 quarts of water and the pasta salt to a boil, covered. |
+| F | 2 | cook | Heat a nonstick skillet over medium-high for 2 min and mist with oil spray. Add the beef, press it into one flat layer, salt it, and don't touch it for 3 min, until the bottom is deep brown. Break it up and cook 1 min more. |
+| F | 3 | cook | Add the mushrooms. Cook 4–5 min, stirring now and then, until their liquid cooks off and they brown. |
+| F | 4 | cook | Push everything aside, put the tomato paste on the bare spot and stir it 1–2 min until it turns a shade darker. Add the garlic, oregano and chili flakes for 30 s. |
+| F | 5 | cook | Stir in the marinara and balsamic. Simmer on low for 10 min, stirring now and then. |
+| F | 6 | cook | Meanwhile, cook the pasta 1 min less than the package says. Save ¼ cup of the pasta water, then drain. |
+| F | 7 | cook | Toss the pasta in the sauce for 1 min, adding a splash of pasta water if it's thick. |
+| F | 8 | cook | Top with the parmesan and basil. |
+| G | 1 | serve | Microwave the chicken with the lid ajar and a splash of water, 60–90 s, until hot. It's also good cold. |
+| G | 2 | serve | Dress the salad now with the vinegar, oregano and a pinch of salt, and toss. |
+| G | 3 | serve | Warm the pita 30 s per side in a dry pan, or in the toaster. |
+| G | 4 | serve | Add the tzatziki and feta. Tear the pita to scoop. |
+| G | 1 | cook | The night before: pat the chicken dry, salt every side and leave it uncovered on a plate in the fridge. |
+| G | 2 | cook | Heat the air fryer to 400°F. Mist the chicken with oil spray, then coat it with the oregano, paprika, garlic powder, lemon zest and pepper. |
+| G | 3 | cook | Air-fry 10 min, flip, then 6–10 min more until it reads 165°F. Rest 5 min, then slice. |
+| G | 4 | cook | Toss the cucumber, tomatoes and onion with the vinegar, oregano and salt. |
+| G | 5 | cook | Warm the pita 30 s per side in a dry pan, or in the toaster. |
+| G | 6 | cook | Plate the chicken, salad, tzatziki and feta. Tear the pita to scoop. |
 
 ## Sauces
 
-`batch_g` is how many grams one batch makes, used for prep and groceries.
+`servings` is how many servings one batch makes; meal prep makes whole or half batches to cover the days ahead. `0` means it's made fresh inside a recipe.
 
-| sauce | makes | recipe | per serving | keeps | batch_g |
-|---|---|---|---|---|---|
-| Tzatziki | 4 × 75 g | 200 g 0% Greek yogurt; ½ English cucumber, grated, salted, squeezed dry; 1 small garlic clove, grated; 1 tbsp lemon juice + ½ tsp zest; 1 tbsp fresh dill (or mint); 1 tsp olive oil; ¼ tsp salt; pepper. Rest 30 min. | ~45 kcal, 5 g protein | 3–4 days | 300 |
-| Lemon-garlic yogurt sauce | 6 × 40 g | 200 g 0% Greek yogurt, juice + zest of 1 lemon, 1 grated garlic clove, salt, pepper, water to thin | ~25 kcal, 4 g protein | 4 days | 240 |
-| Lime crema | 4 × 30 g | 100 g 0% Greek yogurt, juice of 1 lime, pinch of salt | ~20 kcal, 3 g protein | 4 days | 120 |
-| Green herb sauce | ~8 tbsp | Blend 1 cup parsley, ½ cup cilantro, 1 garlic clove, 3 tbsp red wine vinegar, 2 tbsp olive oil, 3 tbsp water, chili flakes, salt | ~40 kcal per tbsp | 5 days | 120 |
-| Ginger-scallion sauce | ~6 tbsp | 4 scallions finely chopped, 1 tbsp grated ginger, 1 tbsp rice vinegar, 1 tbsp low-sodium soy, 2 tsp neutral oil | ~25 kcal per tbsp | 5 days | 90 |
-| Quick-pickled red onion | 1 jar | 1 red onion sliced thin, ½ cup vinegar, ½ cup water, 1 tsp sugar, 1 tsp salt. Ready in 30 min. | ~5 kcal | 2 weeks | 200 |
-| Pico de gallo | 4 × 60 g | 2 tomatoes, ¼ red onion, cilantro, lime, salt; raw jalapeño optional | ~15 kcal | 2–3 days | 240 |
-| Miso glaze | per fillet | 1 tbsp white miso, 1 tsp honey, 1 tsp rice vinegar, ½ tsp grated ginger | ~55 kcal | make fresh | 0 |
+| sauce | makes | serving | servings | keeps | time | kcal | note |
+|---|---|---|---|---|---|---|---|
+| Tzatziki | about 1⅓ cups | ⅓ cup | 4 | 4 days | 15 min + 30 min chill | ~45 kcal and 5 g protein per serving | For the Greek chicken plate (G). |
+| Lemon-garlic yogurt sauce | about 1 cup | 2½ tbsp | 6 | 4 days | 5 min | ~25 kcal and 4 g protein per serving | For the lemon-herb chicken bowl (A). |
+| Lime crema | about ½ cup | 2 tbsp | 4 | 4 days | 3 min | ~20 kcal and 3 g protein per serving | For the burrito bowl (B). |
+| Pico de gallo | about 1¼ cups | ¼ cup | 4 | 3 days | 10 min | ~15 kcal per serving | For the burrito bowl (B). |
+| Quick-pickled red onion | a pint jar, about 1½ cups | 3 tbsp | 8 | 2 weeks | 5 min + 30 min | ~5 kcal per serving | For the steak tacos (D). |
+| Green herb sauce | about ¾ cup | 2 tbsp | 6 | 5 days | 5 min | ~45 kcal per serving | Swap for the A sauce. Skip the broccoli oil when you use it. |
+| Ginger-scallion sauce | about 6 tbsp | 1½ tbsp | 4 | 5 days | 5 min | ~30 kcal per serving | Swap for the A sauce. Skip the broccoli oil when you use it. |
+| Miso glaze | enough for 1 fillet | all of it | 0 | make fresh | 2 min | ~55 kcal | Made inside the salmon recipe (C). |
+| Stir-fry sauce | enough for 1 stir-fry | all of it | 0 | make fresh | 2 min | ~45 kcal | Made inside the shrimp recipe (E). |
 
 ## Sauce ingredients
 
-What one batch of each sauce needs. Used for the grocery list. Garlic and salt are in Pantry staples.
+One batch of each sauce, in the same columns as Ingredients. `buy` and `section` feed the grocery list.
 
-| sauce | ingredient | qty | unit | section |
-|---|---|---|---|---|
-| Tzatziki | 0% Greek yogurt | 200 | g | Dairy |
-| Tzatziki | English cucumber | 0.5 | each | Produce |
-| Tzatziki | lemon | 0.5 | each | Produce |
-| Tzatziki | fresh dill | 1 | tbsp | Produce |
-| Tzatziki | olive oil | 1 | tsp | Pantry |
-| Lemon-garlic yogurt sauce | 0% Greek yogurt | 200 | g | Dairy |
-| Lemon-garlic yogurt sauce | lemon | 1 | each | Produce |
-| Lime crema | 0% Greek yogurt | 100 | g | Dairy |
-| Lime crema | lime | 1 | each | Produce |
-| Green herb sauce | parsley | 1 | cup | Produce |
-| Green herb sauce | red wine vinegar | 3 | tbsp | Pantry |
-| Green herb sauce | olive oil | 2 | tbsp | Pantry |
-| Ginger-scallion sauce | scallion | 4 | each | Produce |
-| Ginger-scallion sauce | ginger | 1 | tbsp | Produce |
-| Ginger-scallion sauce | rice vinegar | 1 | tbsp | Pantry |
-| Ginger-scallion sauce | low-sodium soy sauce | 1 | tbsp | Pantry |
-| Quick-pickled red onion | red onion | 1 | each | Produce |
-| Quick-pickled red onion | white vinegar | 0.5 | cup | Pantry |
-| Quick-pickled red onion | sugar | 1 | tsp | Pantry |
-| Pico de gallo | tomato | 2 | each | Produce |
-| Pico de gallo | red onion | 0.25 | each | Produce |
-| Pico de gallo | lime | 0.5 | each | Produce |
+| sauce | qty | unit | item | buy | section |
+|---|---|---|---|---|---|
+| Tzatziki | 0.5 | each | English cucumber (about 6 oz), skin on | English cucumber | Produce |
+| Tzatziki | 0.25 | tsp | kosher salt, for the cucumber | - | Staple |
+| Tzatziki | 1 | cup | 0% plain Greek yogurt | Greek yogurt | Dairy |
+| Tzatziki | 1 | each | small garlic clove{s}, finely grated | - | Staple |
+| Tzatziki | 1 | tbsp | lemon juice | lemon juice | Produce |
+| Tzatziki | 0.5 | tsp | lemon zest | lemon zest | Produce |
+| Tzatziki | 1 | tbsp | fresh dill, chopped (or 1 tsp dried dill) | dill | Produce |
+| Tzatziki | 1 | tsp | extra-virgin olive oil | olive oil | Pantry |
+| Tzatziki | 0.125 | tsp | black pepper | - | Staple |
+| Lemon-garlic yogurt sauce | 0.75 | cup | 0% plain Greek yogurt | Greek yogurt | Dairy |
+| Lemon-garlic yogurt sauce | 2 | tsp | lemon zest | lemon zest | Produce |
+| Lemon-garlic yogurt sauce | 1.5 | tbsp | lemon juice | lemon juice | Produce |
+| Lemon-garlic yogurt sauce | 1 | each | small garlic clove{s}, finely grated | - | Staple |
+| Lemon-garlic yogurt sauce | 0.25 | tsp | kosher salt | - | Staple |
+| Lemon-garlic yogurt sauce | 0.125 | tsp | black pepper | - | Staple |
+| Lemon-garlic yogurt sauce | 1 | tbsp | water, plus more to thin | - | Staple |
+| Lime crema | 0.5 | cup | 0% plain Greek yogurt | Greek yogurt | Dairy |
+| Lime crema | 0.5 | tsp | lime zest | lime zest | Produce |
+| Lime crema | 1 | tbsp | lime juice | lime juice | Produce |
+| Lime crema | 0.125 | tsp | kosher salt | - | Staple |
+| Lime crema | 2 | tsp | water, to thin | - | Staple |
+| Pico de gallo | 2 | each | Roma tomato{es}, seeded, ¼-inch dice | Roma tomatoes | Produce |
+| Pico de gallo | 0.25 | cup | red onion, finely diced | red onion | Produce |
+| Pico de gallo | 0.25 | cup | cilantro, chopped (leaves and tender stems) | cilantro | Produce |
+| Pico de gallo | 1 | tbsp | lime juice | lime juice | Produce |
+| Pico de gallo | 0.25 | tsp | kosher salt | - | Staple |
+| Pico de gallo | 0.5 | each | jalapeño{s}, seeded and minced (optional) | jalapeño | Produce |
+| Quick-pickled red onion | 1 | each | medium red onion{s}, halved and sliced ⅛ inch thin | red onion | Produce |
+| Quick-pickled red onion | 0.5 | cup | white vinegar (or apple cider vinegar) | white vinegar | Pantry |
+| Quick-pickled red onion | 0.5 | cup | warm water | - | Staple |
+| Quick-pickled red onion | 1 | tsp | sugar | sugar | Pantry |
+| Quick-pickled red onion | 1 | tsp | kosher salt | - | Staple |
+| Green herb sauce | 1 | cup | flat-leaf parsley, packed (leaves and tender stems) | parsley | Produce |
+| Green herb sauce | 0.5 | cup | cilantro, packed | cilantro | Produce |
+| Green herb sauce | 1 | each | garlic clove{s} | - | Staple |
+| Green herb sauce | 3 | tbsp | red wine vinegar | red wine vinegar | Pantry |
+| Green herb sauce | 2 | tbsp | olive oil | olive oil | Pantry |
+| Green herb sauce | 3 | tbsp | water | - | Staple |
+| Green herb sauce | 0.25 | tsp | chili flakes | - | Staple |
+| Green herb sauce | 0.25 | tsp | kosher salt | - | Staple |
+| Ginger-scallion sauce | 4 | each | scallion{s}, finely chopped | scallions | Produce |
+| Ginger-scallion sauce | 1 | tbsp | fresh ginger, finely grated | ginger | Produce |
+| Ginger-scallion sauce | 1 | tbsp | rice vinegar | rice vinegar | Pantry |
+| Ginger-scallion sauce | 1 | tbsp | low-sodium soy sauce | low-sodium soy sauce | Pantry |
+| Ginger-scallion sauce | 2 | tsp | avocado oil | avocado oil | Pantry |
+
+## Sauce steps
+
+| sauce | step | text |
+|---|---|---|
+| Tzatziki | 1 | Grate the cucumber on the large holes of a box grater, skin on. No need to seed it. |
+| Tzatziki | 2 | Toss it with the salt in a strainer and let it sit 10 min. |
+| Tzatziki | 3 | Squeeze it dry: pile it in a clean dish towel or a double layer of paper towels and wring it hard over the sink until it stops dripping. This is what keeps tzatziki thick instead of watery. |
+| Tzatziki | 4 | In a bowl, stir together the yogurt, squeezed cucumber, garlic, lemon juice, lemon zest, dill, olive oil and pepper. |
+| Tzatziki | 5 | Taste it. If it's flat, add a pinch of salt or a squeeze of lemon. |
+| Tzatziki | 6 | Cover and chill at least 30 min so the garlic mellows. Keep it in a sealed jar and stir before serving. |
+| Lemon-garlic yogurt sauce | 1 | Zest the lemon first (it's hard to zest once it's cut), then juice it. |
+| Lemon-garlic yogurt sauce | 2 | Whisk the yogurt, zest, lemon juice, garlic, salt and pepper in a bowl. |
+| Lemon-garlic yogurt sauce | 3 | Whisk in the water 1 tbsp at a time until it drizzles like ranch. |
+| Lemon-garlic yogurt sauce | 4 | Taste for salt and lemon, then jar it. |
+| Lime crema | 1 | Zest the lime, then juice it. |
+| Lime crema | 2 | Whisk the yogurt, zest, juice and salt. Add water until it drizzles, then jar it. |
+| Pico de gallo | 1 | Halve the tomatoes and scoop out the seeds and juice with a spoon so the pico isn't watery. Dice ¼ inch. |
+| Pico de gallo | 2 | Dice the onion fine, put it in a strainer and rinse it under cold water for 10 s. This takes the harsh raw bite off. |
+| Pico de gallo | 3 | Stir together the tomato, onion, cilantro, jalapeño (if using), lime juice and salt. |
+| Pico de gallo | 4 | Let it sit 10 min, tip off any liquid, then jar it. |
+| Quick-pickled red onion | 1 | Slice the onion as thin as you can and pack it into a pint jar. |
+| Quick-pickled red onion | 2 | Stir the vinegar, warm water, sugar and salt until dissolved (30 s in the microwave helps). |
+| Quick-pickled red onion | 3 | Pour it over the onion and press the onion down so it's covered. |
+| Quick-pickled red onion | 4 | Leave it on the counter 30 min (it turns bright pink), then refrigerate. |
+| Green herb sauce | 1 | Put everything in a blender or mini food processor. |
+| Green herb sauce | 2 | Blend 30–45 s until smooth, scraping down once. Add 1 tbsp more water if it won't move. |
+| Green herb sauce | 3 | Taste for salt and vinegar, then jar it. |
+| Ginger-scallion sauce | 1 | Put the scallions and ginger in a heatproof bowl. |
+| Ginger-scallion sauce | 2 | Heat the oil in a small pan until it shimmers (about 1 min) and pour it over. It should sizzle. |
+| Ginger-scallion sauce | 3 | Stir in the vinegar and soy, then jar it. |
 
 ## Chef tricks
 
 | n | trick |
 |---|---|
-| 1 | Dry-brine the chicken the night before: about ¾ tsp kosher salt per 500 g, uncovered in the fridge. |
+| 1 | Dry-brine the chicken the night before: ¾ tsp Morton kosher salt per lb (1¼ tsp if it's Diamond Crystal), every side, uncovered in the fridge. |
 | 2 | Stop at 165°F. Use an instant-read thermometer. Overcooking is why prep chicken tastes dry. |
 | 3 | Get color: pat food dry, use a single layer, air-fry at 400°F. |
 | 4 | Add acid when you eat, not when you prep. Lemon, lime or vinegar makes day-4 food taste fresh. |
-| 5 | Keep sauces in separate containers and add them at the table. |
+| 5 | Keep sauces in separate jars and add them at the table. |
 | 6 | Toast dry spices for 30 s in a dry pan. |
 | 7 | Use almost calorie-free umami: low-sodium soy, miso, tomato paste cooked dark, a little parmesan. |
 | 8 | Finish with fresh herbs, citrus zest or scallions. |
-| 9 | Reheat covered with a splash of water. |
+| 9 | Reheat with the lid ajar and 1 tbsp water over the rice. |
 
 ## Prep sessions
 
@@ -434,78 +575,93 @@ Cooked chicken keeps 3–4 days, so prep happens twice. `brine` is the evening b
 
 ## Prep steps
 
-The prep checklist, in order. A step shows only when its `needs` ingredient is in that session. `{qty:name}` fills in the amount; `{buy:name}` fills in the dry/store amount.
+The meal-prep checklist, in order. A step shows only when this session has something matching `needs`: `A+G/Chicken` means the Chicken rows of meals A and G; `sauces` means sauces to make; `containers` means meals to pack.
+
+In `step`: `**bold**` works; ` ¶ ` starts a new line. `{list:A+G/Chicken}` shows the full ingredient list for that session; `{amt:A+B/Rice/cooked brown rice}` shows one total; `{n:A+G}` counts portions; `{dry:…}`, `{water:…}` and `{pouches:…}` turn cooked rice into dry rice, cooking water and 2-cup microwave pouches.
 
 | needs | step |
 |---|---|
-| chicken breast | Take the dry-brined chicken out of the fridge. Heat the air fryer to 400°F. |
-| brown rice, cooked | Start the rice: {buy:brown rice, cooked} dry brown rice makes {qty:brown rice, cooked} cooked. |
-| brown rice, cooked (cilantro-lime) | Cook {buy:brown rice, cooked (cilantro-lime)} more dry brown rice for {qty:brown rice, cooked (cilantro-lime)} cooked. While warm, stir in lime zest, juice, cilantro and salt. |
-| chicken breast (lemon-herb) | Season {qty:chicken breast (lemon-herb)} chicken with lemon, garlic, oregano and smoked paprika. Air-fry in a single layer to 165°F, in batches. |
-| chicken breast (cumin-lime) | Toast the cumin 30 s. Season {qty:chicken breast (cumin-lime)} chicken with cumin, chili powder, garlic, oregano and lime. Air-fry to 165°F. |
-| broccoli | Toss {qty:broccoli} broccoli with oil, garlic and chili flakes. Air-fry until charred, 8–10 min. |
-| black beans, canned | Warm {qty:black beans, canned} black beans with cumin and garlic. |
-| cabbage | Shred {qty:cabbage} cabbage for the taco slaw. Dress it with lime when you eat. |
-| English cucumber | Chop {qty:English cucumber} cucumber, {qty:tomato} tomato and {qty:red onion} red onion for the Greek salad. Dress it when you eat. |
-| romaine | Wash and dry {qty:romaine} romaine. |
-| scallion | Slice {qty:scallion} scallions. |
-| sauces | Make the sauces listed below. Each goes in its own container. |
-| chicken breast | Rest the chicken 5 min, slice, and portion into the labeled containers below. |
+| A+B/Rice | **Start the rice first; it takes the longest.** You need {amt:A+B/Rice/cooked brown rice} cooked, which is {dry:A+B/Rice/cooked brown rice} dry brown rice. ¶ Rice cooker: rinse it, add water to the brown-rice line, use the brown-rice setting. ¶ Stovetop: rinse it, add {water:A+B/Rice/cooked brown rice} water and ¼ tsp salt, bring to a boil, cover, turn to the lowest heat for 45 min, then leave it off the heat 10 min with the lid on. ¶ Shortcut: {pouches:A+B/Rice/cooked brown rice} of brown rice (2 cups each), 90 s each. |
+| A+B+G/Chicken | **Heat the air fryer to 400°F** and take last night's brined chicken out of the fridge. Any breast thicker than 1 inch: slice it in half horizontally so every piece is ¾–1 inch thick and cooks evenly. |
+| A+G/Chicken | **Lemon-herb chicken ({n:A+G}):** mix the spices in a small bowl. Mist the chicken with oil spray and coat every side. {list:A+G/Chicken} |
+| B/Chicken | **Cumin-lime chicken ({n:B}):** toast the cumin in a dry pan over medium heat for 30–60 s, until it smells nutty. Mix it with the other spices and coat the chicken. {list:B/Chicken} |
+| A+B+G/Chicken | **Air-fry the chicken** at 400°F in a single layer with space around each piece, in batches if needed (both flavors can share the basket): 10 min, flip, then 6–10 min more until the thickest part reads 165°F. Let it rest on a board while you do the rest. |
+| sauces | **Make the sauces** while the chicken cooks. Each one goes in its own jar and stays separate until you eat. |
+| A/Broccoli | **Broccoli:** toss everything together and air-fry at 400°F for 8–10 min, shaking halfway, until the edges char. {list:A/Broccoli} |
+| B/Beans | **Black beans:** rinse and drain, then warm them in a small pot over medium heat for 3–4 min with the spices and water. {list:B/Beans} |
+| A/Rice | **Bowl rice (for A):** when the rice is done, measure it into a bowl and stir in the rest. {list:A/Rice} |
+| B/Rice | **Cilantro-lime rice (for B):** measure it into a second bowl and stir in the rest. {list:B/Rice} |
+| G/Greek salad | **Greek salad (for G):** chop it and pack it undressed so it stays crisp. {list:G/Greek salad} |
+| B/Romaine | **Romaine (for B):** wash, dry well and chop. {list:B/Romaine} |
+| D/Slaw | **Taco slaw (for the taco nights ahead):** shred the cabbage thin, or use bagged coleslaw mix. Keep it dry in a zip bag; you dress it when you cook. {list:D/Slaw} |
+| A+B+G/Chicken | **Slice the chicken** across the grain into ½-inch strips. Split each flavor evenly between its containers, about 5¼ oz cooked each. |
+| containers | **Pack the containers** using the list below. Let the food cool 15–20 min uncovered, then lid it and refrigerate within 2 hours of cooking. |
 
 ## Store units
 
-How ingredients become grocery amounts. `factor` converts the recipe unit to `store_unit`; `round` rounds up to that step.
+How recipe amounts become grocery amounts. `ingredient` and `unit` match the `buy` name and unit in Ingredients, Sauce ingredients, Daily groceries and Refill extras. `factor` converts to `store_unit`; `round` rounds up to that step.
 
 | ingredient | unit | buy_as | factor | store_unit | round | note |
 |---|---|---|---|---|---|---|
-| chicken breast (lemon-herb) | g | chicken breast | 0.0022046 | lb | 0.25 |  |
-| chicken breast (cumin-lime) | g | chicken breast | 0.0022046 | lb | 0.25 |  |
-| wild salmon | g | wild salmon | 0.0022046 | lb | 0.25 |  |
-| top sirloin, trimmed | g | top sirloin | 0.0022046 | lb | 0.25 |  |
-| shrimp | g | shrimp (peeled) | 0.0022046 | lb | 0.25 |  |
-| 95% lean ground beef | g | 95% lean ground beef | 0.0022046 | lb | 0.25 |  |
-| brown rice, cooked | g | brown rice (dry) | 0.36 | g | 25 | or 250 g microwave pouches |
-| brown rice, cooked (cilantro-lime) | g | brown rice (dry) | 0.36 | g | 25 | or 250 g microwave pouches |
-| jasmine rice, cooked | g | jasmine rice (dry) | 0.33 | g | 25 |  |
-| broccoli | g | broccoli | 0.0022046 | lb | 0.25 |  |
-| Yukon potatoes | g | Yukon potatoes | 0.0022046 | lb | 0.25 |  |
-| asparagus | g | asparagus | 0.0022046 | lb | 0.25 | about 1 lb per bunch |
-| snap peas | g | snap peas | 0.0022046 | lb | 0.25 |  |
-| bok choy | g | bok choy | 0.0022046 | lb | 0.25 |  |
-| mushrooms | g | mushrooms | 0.0022046 | lb | 0.25 |  |
-| cabbage | g | cabbage | 0.0011 | head | 0.5 |  |
-| romaine | g | romaine hearts | 0.005 | each | 1 |  |
-| romaine (dinner salad) | g | romaine hearts | 0.005 | each | 1 |  |
-| English cucumber | g | English cucumber | 0.0025 | each | 1 |  |
-| tomato | g | tomatoes | 0.0083 | each | 1 |  |
-| red onion | g | red onion | 0.005 | each | 1 |  |
-| avocado | g | avocado | 0.0067 | each | 1 |  |
-| black beans, canned | g | black beans (15 oz can) | 0.0042 | can | 1 |  |
-| scallion | each | scallions | 0.125 | bunch | 1 |  |
-| 0% Greek yogurt | g | 0% Greek yogurt | 1 | g | 50 |  |
+| chicken breast | oz | chicken breast, boneless skinless | 0.0625 | lb | 0.25 |  |
+| wild salmon | oz | wild salmon fillets | 0.0625 | lb | 0.25 | 6-oz fillets |
+| top sirloin | oz | top sirloin steak | 0.0625 | lb | 0.25 |  |
+| shrimp | oz | raw shrimp, peeled and deveined | 0.0625 | lb | 0.25 | Frozen is fine. Thaw overnight in the fridge. |
+| 95% lean ground beef | oz | 95% lean ground beef | 0.0625 | lb | 1 | 1-lb packs |
+| brown rice, cooked | cup | brown rice (dry) | 0.334 | cup | 0.25 | 1 cup dry makes about 3 cups cooked. Or microwave pouches, about 2 cups each. |
+| jasmine rice, cooked | cup | jasmine rice microwave pouches | 0.5 | pouch | 1 | About 2 cups each |
+| broccoli | cup | broccoli crowns | 0.2 | lb | 0.25 | 1 lb is about 5 cups of florets |
+| Yukon Gold potatoes | oz | Yukon Gold potatoes | 0.0625 | lb | 0.25 |  |
+| asparagus | oz | asparagus | 0.0625 | bunch | 1 | About 1 lb per bunch |
+| snap peas | cup | snap peas | 3.5 | oz | 8 | 8-oz bags |
+| mushrooms | cup | cremini mushrooms | 2.5 | oz | 8 | 8-oz packs |
+| cabbage | cup | green cabbage | 0.0833 | head | 0.5 | Or a 14-oz bag of coleslaw mix |
+| romaine | cup | romaine hearts | 0.25 | each | 1 | About 4 cups chopped per heart |
+| English cucumber | cup | English cucumber | 0.333 | each | 1 |  |
+| cherry tomatoes | cup | cherry tomatoes | 0.5 | pint | 1 |  |
+| red onion | tbsp | red onions | 0.0625 | each | 1 |  |
+| red onion | each | red onions | 1 | each | 1 |  |
+| lemon | each | lemons | 1 | each | 1 |  |
+| lemon juice | tbsp | lemons | 0.333 | each | 1 |  |
+| lemon zest | tsp | lemons | 0.333 | each | 1 |  |
+| lime | each | limes | 1 | each | 1 |  |
+| lime juice | tbsp | limes | 0.5 | each | 1 |  |
+| lime zest | tsp | limes | 0.5 | each | 1 |  |
+| cilantro | tbsp | cilantro | 0.0625 | bunch | 1 |  |
+| parsley | cup | flat-leaf parsley | 1 | bunch | 1 |  |
+| dill | tbsp | fresh dill | 0.25 | pack | 1 | Small clamshell |
+| basil | each | fresh basil | 0.05 | pack | 1 | Small clamshell |
+| scallions | each | scallions | 0.15 | bunch | 1 |  |
+| ginger | tsp | fresh ginger | 0.1 | piece | 1 | A 3-inch piece |
+| avocado | each | avocados | 1 | each | 1 |  |
+| black beans | cup | black beans (15-oz can) | 0.667 | can | 1 |  |
+| Greek yogurt | cup | 0% plain Greek yogurt | 1 | cup | 0.5 | A 32-oz tub is about 3½ cups |
+| cotija | tbsp | cotija | 0.25 | oz | 1 |  |
+| feta | tbsp | feta | 0.25 | oz | 1 |  |
+| parmesan | tbsp | parmesan | 0.2 | oz | 1 |  |
+| dry pasta | oz | short pasta | 1 | oz | 1 | A 1-lb box lasts 8 dinners |
 
 ## Pantry staples
 
-Every meal uses these. They show under "check stock".
+Spices and basics every recipe uses. They show under "check stock" on the grocery list.
 
 | item |
 |---|
-| garlic |
-| kosher salt |
-| smoked paprika |
-| cumin |
-| chili powder |
-| oregano |
-| rosemary |
+| kosher salt (Morton) |
+| black pepper |
+| garlic (fresh heads) |
 | garlic powder |
+| smoked paprika |
+| ground cumin |
+| chili powder |
+| dried oregano |
+| dried rosemary |
 | chili flakes |
-| dill |
-| cilantro |
-| parsley |
+| olive-oil spray |
 
 ## Daily groceries
 
-Fixed items, counted per day. `when` uses the same words as the Checklist.
+Fixed items, counted per day. `when` uses the same words as the Checklist. `item` is the grocery name, matched against Store units.
 
 | item | qty | unit | when | section |
 |---|---|---|---|---|
@@ -520,8 +676,18 @@ Fixed items, counted per day. `when` uses the same words as the Checklist.
 | rice cakes | 2 | each | lifting refill | Grains |
 | honey | 1 | tbsp | lifting refill | Pantry |
 | Isopure | 1.5 | scoops | home | Pantry |
-| romaine (dinner salad) | 75 | g | home dinner | Produce |
+| romaine | 1.5 | cup | home dinner | Produce |
 | lemon | 0.25 | each | home dinner | Produce |
+
+## Side salad
+
+Served with every home dinner.
+
+| qty | unit | item |
+|---|---|---|
+| 1.5 | cup | romaine, chopped |
+| 0.25 | each | lemon, squeezed over |
+|  |  | a pinch of salt |
 
 ## Refill extras
 
@@ -529,8 +695,8 @@ Added on each refill day for about +150 g carbs.
 
 | item | qty | unit | section | note |
 |---|---|---|---|---|
-| jasmine rice, cooked | 300 | g | Grains | ~85 g carbs, with lunch and dinner |
-| Yukon potatoes | 200 | g | Produce | ~35 g carbs |
+| jasmine rice, cooked | 2 | cup | Grains | ~85 g carbs, split between lunch and dinner |
+| Yukon Gold potatoes | 7 | oz | Produce | ~35 g carbs |
 | banana | 1 | each | Produce | ~27 g carbs |
 
 ## Travel packing

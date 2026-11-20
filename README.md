@@ -16,7 +16,7 @@ On your phone only, in the installed app's storage (IndexedDB, with a second cop
 - `index.html` — layout and styles
 - `app.js` — reads plan.md, builds each day's checklist, saves your log
 - `rules.js` — progress math, the Part H rules, and pattern flags (plain arithmetic, no AI)
-- `food.js` — Food tab: weekly menu, meal-prep math, sauce batches, grocery list, recipe cards
+- `food.js` — Food tab: weekly menu, step-by-step meal prep (with every sauce recipe inline), recipe library, grocery list. Amounts are US kitchen units (oz, cups, tbsp, tsp), computed from the Ingredients, Sauce ingredients and Store units tables in plan.md
 - `timer.js` — rope and heavy-bag interval timer (beeps, wake lock, auto check-off)
 - `splash.jpg` — the opening screen
 - `sw.js` — offline cache. Bump `VERSION` when any file other than plan.md changes.
