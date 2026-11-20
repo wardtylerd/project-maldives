@@ -81,6 +81,8 @@ function buildPlan(md){
   Object.values(plan.recipes).forEach(a=>a.sort((x,y)=>(+x.step)-(+y.step)));
   plan.sauces = T('sauces', true);
   plan.sauceIngredients = T('sauce ingredients', true);
+  plan.sauceSteps = T('sauce steps', true);
+  plan.sideSalad = T('side salad', true);
   plan.tricks = {}; T('chef tricks', true).forEach(r=>plan.tricks[r.n]=r.trick);
   plan.prepSessions = T('prep sessions', true);
   plan.prepSteps = T('prep steps', true);
@@ -158,7 +160,7 @@ function vars(d){
   const start = sessionStart(d), st = parseTime(start), wm = d.gym.before ? timerMinutes(d.gym.before) : 0;
   const prepToday = typeof prepFor==='function' ? prepFor(d.s) : null;
   const prepTomorrow = typeof prepFor==='function' ? prepFor(add(d.s,1)) : null;
-  const brineG = prepTomorrow ? prepTomorrow.chickenG : 0;
+  const brineOz = prepTomorrow ? prepTomorrow.chickenOz : 0, brineTsp = prepTomorrow ? prepTomorrow.brineTsp : 0;
   return {
     rope_name: d.rope ? d.rope.name : '', rope_minutes: d.rope ? d.rope.minutes : '',
     warmup_name: d.gym.before ? timerName(d.gym.before) : '', warmup_minutes: wm, warmup_time: start,
@@ -168,11 +170,10 @@ function vars(d){
     snack: d.snack, session: d.session, session_title: sessionTitle(d),
     calories: d.dt.calories||'', protein: d.dt.protein||'',
     prep_time: prepToday ? prepToday.time : '', prep_minutes: prepToday ? prepToday.minutes : '', prep_covers: prepToday ? prepToday.coversLabel : '',
-    brine_g: Math.round(brineG), brine_salt: brineSalt(brineG),
+    brine_amt: typeof ozStr==='function' ? ozStr(brineOz) : Math.round(brineOz)+' oz', brine_salt: typeof volStr==='function' ? volStr(brineTsp) : '', brine_salt_dc: typeof volStr==='function' ? volStr(brineTsp*5/3) : '',
     next_week: short(add(d.s,1))+'–'+short(add(d.s,7))
   };
 }
-function brineSalt(g){ const tsp = g/500*0.75; const q = Math.round(tsp*4)/4; const whole = Math.floor(q), frac = q - whole; const f = {0:'',0.25:'¼',0.5:'½',0.75:'¾'}[frac]; return (whole?whole:'')+(f||'')+(q? ' tsp':'0 tsp'); }
 const fill = (t,v) => String(t||'').replace(/\{(\w+)\}/g,(m,k)=> v[k]!==undefined ? v[k] : m);
 
 function matchWhen(w, d){
@@ -188,7 +189,7 @@ function matchWhen(w, d){
     else if (t==='dinner'){ if(!d.dinner) return false; }
     else if (t==='snack'){ if(!d.snack) return false; }
     else if (t==='prep'){ const p = typeof prepFor==='function' && prepFor(d.s); if(!p || !p.containers.length) return false; }
-    else if (t==='brine'){ const p = typeof prepFor==='function' && prepFor(add(d.s,1)); if(!p || !p.chickenG) return false; }
+    else if (t==='brine'){ const p = typeof prepFor==='function' && prepFor(add(d.s,1)); if(!p || !p.chickenOz) return false; }
     else if (t==='shop'){ if (typeof weekHasMeals!=='function' || !weekHasMeals(add(d.s,1))) return false; }
     else if (DOWK.includes(t)){ if(t!==d.dk) return false; }
     else if (t.startsWith('from:')){ if(d.s < t.slice(5)) return false; }
@@ -360,7 +361,7 @@ function itemHTML(s, it, d){
 function detailHTML(s, it, d){
   let h = '';
   for (const tok of it.detail){
-    if (tok.startsWith('meal:')){ const m = mealFor(d, tok.slice(5)); if (m) h += (typeof recipeCardHTML==='function' && plan.ingredients.some(r=>r.meal===m.id)) ? recipeCardHTML(m, { half: tok==='meal:dinner' && /half/i.test(d.dinnerNote), date: s }) : '<p><b>'+esc(m.name)+'</b><br>'+esc(m.description||'')+'</p>'+(m.kcal?'<p class="muted num">'+m.kcal+' kcal · P '+m.protein+' g</p>':''); }
+    if (tok.startsWith('meal:')){ const m = mealFor(d, tok.slice(5)); if (m) h += (typeof recipeCardHTML==='function' && plan.ingredients.some(r=>r.meal===m.id)) ? recipeCardHTML(m, { half: tok==='meal:dinner' && /half/i.test(d.dinnerNote), date: s, slot: tok.slice(5) }) : '<p><b>'+esc(m.name)+'</b><br>'+esc(m.description||'')+'</p>'+(m.kcal?'<p class="muted num">'+m.kcal+' kcal · P '+m.protein+' g</p>':''); }
     else if (tok.startsWith('supps:')){ const list = plan.supps.filter(x=>x.when===tok.slice(6)); if(list.length) h += '<div class="mt">'+list.map(x=>'<div class="supp"><b>'+esc(x.supplement)+'</b><span>'+esc(x.dose)+'</span>'+(x.notes?'<small>'+esc(x.notes)+'</small>':'')+'</div>').join('')+'</div>'; }
     else if (tok==='nicotine'){ const r = nicotineRule(s); if(r) h += '<p>'+esc(r)+'</p>'; }
     else if (tok==='session'){ h += sessionDetail(s, d); }
